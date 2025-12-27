@@ -26,7 +26,7 @@ type Server struct {
 }
 
 type Database struct {
-	dsn string `mapstructure:"dsn"`
+	Dsn string `mapstructure:"dsn"`
 }
 
 func Init() {
