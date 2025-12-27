@@ -44,7 +44,7 @@ func Init() {
 	}
 
 	// 4.解析配置文件
-	if err := v.Unmarshal(Cfg); err != nil {
+	if err := v.Unmarshal(&Cfg); err != nil {
 		panic("配置文件解析失败, err: " + err.Error())
 	}
 

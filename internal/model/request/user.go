@@ -1,17 +1,19 @@
 package request
 
+import "github.com/google/uuid"
+
 type CreateUserRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Gender   *uint8 `json:"gender"`
-	Age      *uint8 `json:"age"`
-	Email    string `json:"email"`
+	Username string `json:"username" binding:"required,min=3,max=20"`
+	Password string `json:"password" binding:"required,min=6,max=30"`
+	Gender   uint8  `json:"gender"`
+	Age      uint8  `json:"age"`
+	Email    string `json:"email" binding:"required,min=8,max=30"`
 }
 
 type UpdateUserRequest struct {
-	Id       string  `json:"id"`
-	Password *string `json:"password"`
-	Gender   *uint8  `json:"gender"`
-	Age      *uint8  `json:"age"`
-	Email    *string `json:"email"`
+	Id       uuid.UUID `json:"id" binding:"required, min=64,max=64"`
+	Password *string   `json:"password"`
+	Gender   *uint8    `json:"gender"`
+	Age      *uint8    `json:"age"`
+	Email    *string   `json:"email"`
 }
