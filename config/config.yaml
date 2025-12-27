@@ -1,0 +1,11 @@
+app:
+  name: ginchat
+  mode: debug
+
+server:
+  host: localhost
+  port: 8080
+
+
+database:
+  dsn: "root:123@tcp(47.110.74.7:3306)/ginchat?charset=utf8mb4&parseTime=True"
