@@ -13,6 +13,7 @@ type AppConfig struct {
 	App      App      `mapstructure:"app"`
 	Server   Server   `mapstructure:"server"`
 	Database Database `mapstructure:"database"`
+	Secret   string   `mapstructure:"secret"`
 }
 
 type App struct {
