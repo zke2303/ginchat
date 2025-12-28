@@ -33,7 +33,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user model"
+                    "user module"
                 ],
                 "summary": "更新用户信息",
                 "parameters": [
@@ -121,7 +121,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user model"
+                    "user modulwe"
                 ],
                 "summary": "login",
                 "parameters": [

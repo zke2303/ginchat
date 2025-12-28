@@ -126,7 +126,7 @@ paths:
             type: json
       summary: 更新用户信息
       tags:
-      - user model
+      - user module
   /users/{id}:
     delete:
       consumes:
@@ -205,7 +205,7 @@ paths:
             type: json
       summary: login
       tags:
-      - user model
+      - user modulwe
 securityDefinitions:
   Bearer:
     description: Type "Bearer" followed by a space and JWT token.

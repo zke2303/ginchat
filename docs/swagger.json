@@ -27,7 +27,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "user model"
+                    "user module"
                 ],
                 "summary": "更新用户信息",
                 "parameters": [
@@ -115,7 +115,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "user model"
+                    "user modulwe"
                 ],
                 "summary": "login",
                 "parameters": [

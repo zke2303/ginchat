@@ -173,7 +173,7 @@ func (h *UserHandler) Delete(c *gin.Context) {
 
 // Update 更新用户信息
 // @Summary  更新用户信息
-// @Tags user model
+// @Tags user module
 // @Param request body request.UpdateUserRequest ture "更新用户请求参数"
 // @Accept json
 // @Produce json
@@ -215,7 +215,7 @@ func (h *UserHandler) Update(c *gin.Context) {
 
 // Login
 // @Summary login
-// @Tags user model
+// @Tags user modulwe
 // @Param login body request.LoginRequest true "用户登入参数"
 // @Accept json
 // @Produce json
