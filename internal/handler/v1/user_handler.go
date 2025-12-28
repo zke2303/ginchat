@@ -233,7 +233,8 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	// 2.调用 service 层
-	if err := h.svc.Login(req); err != nil {
+	token, err := h.svc.Login(req)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, model.Response{
 			Code: xerr.CodeNotFound,
 			Msg:  err.Error(),
@@ -242,5 +243,5 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	// 3.返回成功
-	c.JSON(http.StatusOK, model.Success(nil))
+	c.JSON(http.StatusOK, model.Success(token))
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/nanfeng/ginchat/internal/model"
 	"github.com/nanfeng/ginchat/internal/model/request"
+	"github.com/nanfeng/ginchat/internal/pkg/utils"
 	"github.com/nanfeng/ginchat/internal/repository"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -85,20 +86,26 @@ func (svc *UserService) Update(req *request.UpdateUserRequest) error {
 }
 
 // Login 用户登入
-func (svc *UserService) Login(req *request.LoginRequest) error {
+func (svc *UserService) Login(req *request.LoginRequest) (*string, error) {
 	// 1.调用 repository 层
 
 	user, err := svc.repo.GetByUsername(req.Username)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
+	// 2,校验密码
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
-		return errors.New("用户名或密码错误")
+		return nil, errors.New("用户名或密码错误")
 	}
 
-	return nil
+	// 3.生成token
+	token, err := utils.GenerateToken(user.ID.String(), user.Username)
+	if err != nil {
+		return nil, err
+	}
+	return &token, nil
 }
 
 func ToMap(req *request.UpdateUserRequest) *map[string]any {

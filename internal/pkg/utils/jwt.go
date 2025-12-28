@@ -1,18 +1,50 @@
 package utils
 
-import "github.com/nanfeng/ginchat/internal/config"
+import (
+	"time"
 
-var Secret = []byte(config.Cfg.Secret)
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
+	"github.com/nanfeng/ginchat/internal/config"
+)
 
-type Claims struct {
-	Id       string
-	username string
+type CustomClaims struct {
+	Username string `json:"username"`
+	jwt.RegisteredClaims
 }
 
 func GenerateToken(id string, username string) (string, error) {
 
+	jwt_id, _ := uuid.NewV6()
+
+	cfg := config.Cfg.Jwt
+
+	claims := &CustomClaims{
+		Username: username,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject:   id,
+			Issuer:    cfg.Iss,
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(cfg.Exp) * time.Millisecond)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			ID:        jwt_id.String(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	return token.SignedString([]byte(cfg.Secret))
 }
 
-func ParseToken(token string) (Claims, error) {
+func ParseToken(tokenString string) bool {
 
+	secret := config.Cfg.Jwt.Secret
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secret), nil
+	})
+
+	if err != nil {
+		return false
+	}
+
+	return token.Valid
 }

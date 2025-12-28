@@ -13,7 +13,7 @@ type AppConfig struct {
 	App      App      `mapstructure:"app"`
 	Server   Server   `mapstructure:"server"`
 	Database Database `mapstructure:"database"`
-	Secret   string   `mapstructure:"secret"`
+	Jwt      Jwt      `mapstructure:"jwt"`
 }
 
 type App struct {
@@ -24,6 +24,13 @@ type App struct {
 type Server struct {
 	Host string `mapstructure:"host"`
 	Port string `mapstructure:"port"`
+}
+
+type Jwt struct {
+	Secret string `mapstructure:"secret"`
+	Iss    string `mapstructure:"iss"`
+	Aud    string `mapstructure:"aud"`
+	Exp    uint32 `mapstructure:"exp"`
 }
 
 type Database struct {

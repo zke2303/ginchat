@@ -10,5 +10,9 @@ server:
 database:
   dsn: "root:123@tcp(47.110.74.7:3306)/ginchat?charset=utf8mb4&parseTime=True"
 
-  
-secret: github.com/nanfeng/ginchat
+
+jwt:
+  secret: github.com/nanfeng/ginchat
+  iss: github.com/nanfeng
+  exp: 1800000
+  aud: gin-chat
