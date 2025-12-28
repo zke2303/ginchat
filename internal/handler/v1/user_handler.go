@@ -27,16 +27,17 @@ func (h *UserHandler) Register(r *gin.RouterGroup) {
 	}
 }
 
-// @BasePath /api/v1
-// PingExample godoc
-// @Summary 创建一个用户
-// @Schemes
-// @Description 创建一个新用户
+// CreateUser 创建用户
+// @Summary 创建一个新用户
+// @Description 创建一个新用户账号
 // @Tags 用户模块
 // @Accept json
 // @Produce json
-// @Success 200 {string} map[string]any
-// @Router /user [post]
+// @Param request body request.CreateUserRequest true "创建用户请求参数"
+// @Success 200 {object} model.Response "成功响应"
+// @Failure 400 {object} model.Response "请求参数错误"
+// @Failure 500 {object} model.Response "服务器内部错误"
+// @Router /users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req request.CreateUserRequest
 
@@ -46,6 +47,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 			Code: xerr.CodeInvalidParams,
 			Msg:  err.Error(),
 		})
+		return
 	}
 
 	// 2.调用 servive 层
@@ -55,6 +57,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 			Code: xerr.CodeInternal,
 			Msg:  err.Error(),
 		})
+		return
 	}
 
 	// 3.返回成功信息

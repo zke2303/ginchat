@@ -29,7 +29,7 @@ type Database struct {
 	Dsn string `mapstructure:"dsn"`
 }
 
-func Init() {
+func Init() *AppConfig {
 	// 1.创建一个viper对象
 	v := viper.New()
 
@@ -56,4 +56,6 @@ func Init() {
 			panic("配置热更新失败, err: " + err.Error())
 		}
 	})
+
+	return Cfg
 }
