@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -34,11 +35,12 @@ func JwtAuthMiddleware() func(c *gin.Context) {
 		}
 
 		// 解析token
+		fmt.Println(parts[1])
 		username, err := utils.ParseToken(parts[1])
 		if err != nil {
 			c.JSON(http.StatusOK, model.Response{
 				Code: xerr.CodeUnauthorized,
-				Msg:  "无效的token",
+				Msg:  err.Error(),
 			})
 			c.Abort()
 			return

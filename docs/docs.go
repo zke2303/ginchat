@@ -121,7 +121,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user modulwe"
+                    "user module"
                 ],
                 "summary": "login",
                 "parameters": [

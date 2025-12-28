@@ -205,7 +205,7 @@ paths:
             type: json
       summary: login
       tags:
-      - user modulwe
+      - user module
 securityDefinitions:
   Bearer:
     description: Type "Bearer" followed by a space and JWT token.

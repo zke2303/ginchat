@@ -21,13 +21,19 @@ func NewUserHandler(svc *service.UserService) *UserHandler {
 	}
 }
 
-func (h *UserHandler) Register(r *gin.RouterGroup) {
+func (h *UserHandler) AuthRegister(r *gin.RouterGroup) {
 	users := r.Group("/users")
 	{
-		users.POST("", h.CreateUser)
 		users.GET(":id", h.GetById)
 		users.DELETE(":id", h.Delete)
 		users.PUT("", h.Update)
+	}
+}
+
+func (h *UserHandler) PublicRegister(r *gin.RouterGroup) {
+	users := r.Group("/users")
+	{
+		users.POST("", h.CreateUser)
 		users.POST("/login", h.Login)
 	}
 }
@@ -215,7 +221,7 @@ func (h *UserHandler) Update(c *gin.Context) {
 
 // Login
 // @Summary login
-// @Tags user modulwe
+// @Tags user module
 // @Param login body request.LoginRequest true "用户登入参数"
 // @Accept json
 // @Produce json

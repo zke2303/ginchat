@@ -39,7 +39,7 @@ func ParseToken(tokenString string) (*string, error) {
 
 	secret := config.Cfg.Jwt.Secret
 
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
 

@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nanfeng/ginchat/internal/config"
 	v1 "github.com/nanfeng/ginchat/internal/handler/v1"
+	"github.com/nanfeng/ginchat/internal/middleware"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
@@ -19,9 +20,13 @@ func NewHTTPServer(handler *v1.UserHandler) *http.Server {
 	// Swagger 路由
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	api := r.Group("/v1/api")
+	v1 := r.Group("/v1/api")
 
-	handler.Register(api)
+	public := v1.Group("/")
+	auth := v1.Group("/", middleware.JwtAuthMiddleware())
+
+	handler.PublicRegister(public)
+	handler.AuthRegister(auth)
 
 	return &http.Server{
 		Addr:    fmt.Sprintf(":%s", config.Cfg.Server.Port),
