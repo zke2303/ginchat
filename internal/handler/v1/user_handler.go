@@ -28,6 +28,7 @@ func (h *UserHandler) Register(r *gin.RouterGroup) {
 		users.GET(":id", h.GetById)
 		users.DELETE(":id", h.Delete)
 		users.PUT("", h.Update)
+		users.POST("/login", h.Login)
 	}
 }
 
@@ -209,5 +210,37 @@ func (h *UserHandler) Update(c *gin.Context) {
 		return
 	}
 
+	c.JSON(http.StatusOK, model.Success(nil))
+}
+
+// Login
+// @Summary login
+// @Tags user model
+// @Param login body request.LoginRequest true "用户登入参数"
+// @Accept json
+// @Produce json
+// @Success 200 json model.Response
+// @Router /users/login [post]
+func (h *UserHandler) Login(c *gin.Context) {
+	// 1.从请求中获取信息，并校验
+	var req *request.LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, model.Response{
+			Code: xerr.CodeInvalidParams,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	// 2.调用 service 层
+	if err := h.svc.Login(req); err != nil {
+		c.JSON(http.StatusBadRequest, model.Response{
+			Code: xerr.CodeNotFound,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	// 3.返回成功
 	c.JSON(http.StatusOK, model.Success(nil))
 }

@@ -112,6 +112,39 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user model"
+                ],
+                "summary": "login",
+                "parameters": [
+                    {
+                        "description": "用户登入参数",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
         "/users/{id}": {
             "get": {
                 "consumes": [
@@ -246,6 +279,21 @@ const docTemplate = `{
                 }
             }
         },
+        "request.LoginRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "request.UpdateUserRequest": {
             "type": "object",
             "required": [
@@ -262,8 +310,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "string",
-                    "maxLength": 64
+                    "type": "string"
                 },
                 "password": {
                     "type": "string"

@@ -84,7 +84,23 @@ func (svc *UserService) Update(req *request.UpdateUserRequest) error {
 	return svc.repo.Update(req.Id.String(), maps)
 }
 
-// ToMap 将 request.UpdateUserRequest 转换成 map[string]any 对象
+// Login 用户登入
+func (svc *UserService) Login(req *request.LoginRequest) error {
+	// 1.调用 repository 层
+
+	user, err := svc.repo.GetByUsername(req.Username)
+	if err != nil {
+		return err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
+	if err != nil {
+		return errors.New("用户名或密码错误")
+	}
+
+	return nil
+}
+
 func ToMap(req *request.UpdateUserRequest) *map[string]any {
 	maps := make(map[string]any)
 

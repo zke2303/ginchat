@@ -17,3 +17,8 @@ type UpdateUserRequest struct {
 	Age      *uint8    `json:"age"`
 	Email    *string   `json:"email" binding:"omitempty,email"`
 }
+
+type LoginRequest struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}

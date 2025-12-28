@@ -31,6 +31,16 @@ definitions:
     - password
     - username
     type: object
+  request.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
   request.UpdateUserRequest:
     properties:
       age:
@@ -40,7 +50,6 @@ definitions:
       gender:
         type: integer
       id:
-        maxLength: 64
         type: string
       password:
         type: string
@@ -176,6 +185,27 @@ paths:
       summary: 获取用户信息
       tags:
       - user module
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户登入参数
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: login
+      tags:
+      - user model
 securityDefinitions:
   Bearer:
     description: Type "Bearer" followed by a space and JWT token.
