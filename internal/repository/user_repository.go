@@ -1,8 +1,11 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/google/uuid"
 	"github.com/nanfeng/ginchat/internal/model"
+	"github.com/nanfeng/ginchat/internal/pkg/xerr"
 	"gorm.io/gorm"
 )
 
@@ -39,5 +42,26 @@ func (repo *UserRepository) GetByEmail(email string) (*model.User, error) {
 		return nil, err
 	}
 
+	return &user, nil
+}
+
+// GetById 根据用户id查询用户信息
+func (repo UserRepository) GetById(id string) (*model.User, error) {
+	// 1.定义变量，接收查询结果
+	var user model.User
+	if err := repo.db.First(&user, "id = ?", id).Error; err != nil {
+		// 判断异常类型
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, xerr.Wrap(
+				xerr.CodeNotFound,
+				"Not foud",
+				err,
+			)
+		}
+
+		return nil, err
+	}
+
+	// 2.查询成功,返回查询到的信息
 	return &user, nil
 }

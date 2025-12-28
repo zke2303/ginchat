@@ -19,7 +19,7 @@ type CodeError struct {
 // Error 返回错误信息
 func (e CodeError) Error() string {
 	if e.Cause != nil {
-		return fmt.Sprintf("%s, %v", e.Msg, e.Cause)
+		return fmt.Sprintf("%v", e.Cause)
 	}
 	return e.Msg
 }

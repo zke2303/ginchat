@@ -59,3 +59,9 @@ func (svc *UserService) CreateUser(req *request.CreateUserRequest) (uuid.UUID, e
 	// 6.返回结果
 	return id, nil
 }
+
+// GetById 根据用户id查询用户信息
+func (svc *UserService) GetById(id string) (*model.User, error) {
+	// 1.调用repository层
+	return svc.repo.GetById(id)
+}

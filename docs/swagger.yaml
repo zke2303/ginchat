@@ -74,7 +74,35 @@ paths:
             $ref: '#/definitions/model.Response'
       summary: 创建一个新用户
       tags:
-      - 用户模块
+      - user module
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+        "400":
+          description: 请求参数错误
+          schema:
+            type: json
+        "404":
+          description: 用户不存在
+          schema:
+            type: json
+      summary: 获取用户信息
+      tags:
+      - user module
 securityDefinitions:
   Bearer:
     description: Type "Bearer" followed by a space and JWT token.
