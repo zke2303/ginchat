@@ -19,7 +19,7 @@ func NewHTTPServer(handler *v1.UserHandler) *http.Server {
 	// Swagger 路由
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	api := r.Group("/api")
+	api := r.Group("/v1/api")
 
 	handler.Register(api)
 

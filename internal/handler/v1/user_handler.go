@@ -26,6 +26,7 @@ func (h *UserHandler) Register(r *gin.RouterGroup) {
 	{
 		users.POST("", h.CreateUser)
 		users.GET(":id", h.GetById)
+		users.DELETE(":id", h.Delete)
 	}
 }
 
@@ -68,8 +69,12 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	}))
 }
 
+// GetUserByIdRequest 用于根据路径参数id查询用户信息
+type GetUserByIdRequest struct {
+	ID string `uri:"id" binding:"required,uuid"`
+}
+
 // GetUserById
-// @BasePath /v1/api
 // @Schemes
 // @Summary 获取用户信息
 // @Tags user module
@@ -116,7 +121,50 @@ func (h *UserHandler) GetById(c *gin.Context) {
 	c.JSON(http.StatusOK, model.Success(user))
 }
 
-// GetUserByIdRequest 用于根据路径参数id查询用户信息
-type GetUserByIdRequest struct {
+// GetUserByIdRequest 用于根据路径参数id删除用户
+type DeleteUserByIdRequest struct {
 	ID string `uri:"id" binding:"required,uuid"`
+}
+
+// Delete delete user by id
+// @Tags user module
+// @Summary delete user by id
+// @Param id path string ture "user id"
+// @Accept json
+// @Produce json
+// @Success 200 json model.User
+// @Failure 400 json model.Response
+// @Failure 404 json model.Response
+// @Failure 500 json model.Response
+// @Router /users/{id} [delete]
+func (h *UserHandler) Delete(c *gin.Context) {
+	// 1.从请求中获取参数，并进行校验
+	var req DeleteUserByIdRequest
+	if err := c.ShouldBindUri(&req); err != nil {
+		c.JSON(http.StatusBadRequest, model.Response{
+			Code: xerr.CodeInvalidParams,
+			Msg:  err.Error(),
+		})
+	}
+
+	// 2.调用 service 层
+	if err := h.svc.Delete(req.ID); err != nil {
+		var ec *xerr.CodeError
+		if errors.As(err, &ec) {
+			c.JSON(http.StatusOK, model.Response{
+				Code: xerr.CodeNotFound,
+				Msg:  err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusBadRequest, model.Response{
+			Code: xerr.CodeInternal,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	// 返回成功信息
+	c.JSON(http.StatusOK, model.Success(nil))
 }

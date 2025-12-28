@@ -65,3 +65,8 @@ func (svc *UserService) GetById(id string) (*model.User, error) {
 	// 1.调用repository层
 	return svc.repo.GetById(id)
 }
+
+// Delete 根据用户id删除用信息
+func (svc *UserService) Delete(id string) error {
+	return svc.repo.Delete(id)
+}

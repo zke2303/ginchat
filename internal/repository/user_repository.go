@@ -65,3 +65,18 @@ func (repo UserRepository) GetById(id string) (*model.User, error) {
 	// 2.查询成功,返回查询到的信息
 	return &user, nil
 }
+
+// Delete
+func (repo *UserRepository) Delete(id string) error {
+	// 1.执行Sql操作
+	result := repo.db.Delete(&model.User{}, "id = ?", id)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return xerr.New(xerr.CodeNotFound, "This user is not exists")
+	}
+
+	return nil
+}
