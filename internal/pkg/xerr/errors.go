@@ -7,6 +7,7 @@ const (
 	CodeInvalidParams = 1001
 	CodeNotFound      = 1002
 	CodeAlreadExists  = 1003
+	CodeUnauthorized  = 1004
 	CodeInternal      = 9999
 )
 
