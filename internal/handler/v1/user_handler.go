@@ -27,6 +27,7 @@ func (h *UserHandler) Register(r *gin.RouterGroup) {
 		users.POST("", h.CreateUser)
 		users.GET(":id", h.GetById)
 		users.DELETE(":id", h.Delete)
+		users.PUT("", h.Update)
 	}
 }
 
@@ -166,5 +167,47 @@ func (h *UserHandler) Delete(c *gin.Context) {
 	}
 
 	// 返回成功信息
+	c.JSON(http.StatusOK, model.Success(nil))
+}
+
+// Update 更新用户信息
+// @Summary  更新用户信息
+// @Tags user model
+// @Param request body request.UpdateUserRequest ture "更新用户请求参数"
+// @Accept json
+// @Produce json
+// @Success 200 json model.Response
+// @Failure 400 json model.Response
+// @Failure 404 json model.Response
+// @Router /users [put]
+func (h *UserHandler) Update(c *gin.Context) {
+	var req request.UpdateUserRequest
+	// 1.获取请求参数，并进行校验
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, model.Response{
+			Code: xerr.CodeInvalidParams,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	// 2.调用 service 层
+	if err := h.svc.Update(&req); err != nil {
+		var ec *xerr.CodeError
+		if errors.As(err, &ec) {
+			c.JSON(http.StatusOK, model.Response{
+				Code: xerr.CodeNotFound,
+				Msg:  err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusBadRequest, model.Response{
+			Code: xerr.CodeInternal,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, model.Success(nil))
 }

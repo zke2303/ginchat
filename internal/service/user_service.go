@@ -70,3 +70,38 @@ func (svc *UserService) GetById(id string) (*model.User, error) {
 func (svc *UserService) Delete(id string) error {
 	return svc.repo.Delete(id)
 }
+
+// Update 更新用户信息
+func (svc *UserService) Update(req *request.UpdateUserRequest) error {
+	// 1.将 request.UpdateUserRequest 转换成 map[string]any 对象
+	maps := ToMap(req)
+	// 2.调用 reqo 层
+	return svc.repo.Update(req.Id.String(), maps)
+}
+
+// ToMap 将 request.UpdateUserRequest 转换成 map[string]any 对象
+func ToMap(req *request.UpdateUserRequest) *map[string]any {
+	maps := make(map[string]any)
+
+	if req.Password != nil {
+		password, err := bcrypt.GenerateFromPassword([]byte(*req.Password), bcrypt.DefaultCost)
+		if err != nil {
+			panic("密码加密失败")
+		}
+		maps["password"] = password
+	}
+
+	if req.Age != nil {
+		maps["age"] = req.Age
+	}
+
+	if req.Gender != nil {
+		maps["gender"] = req.Gender
+	}
+
+	if req.Email != nil {
+		maps["email"] = req.Email
+	}
+
+	return &maps
+}

@@ -11,7 +11,7 @@ type CreateUserRequest struct {
 }
 
 type UpdateUserRequest struct {
-	Id       uuid.UUID `json:"id" binding:"required, min=64,max=64"`
+	Id       uuid.UUID `json:"id" binding:"required,uuid"`
 	Password *string   `json:"password"`
 	Gender   *uint8    `json:"gender"`
 	Age      *uint8    `json:"age"`

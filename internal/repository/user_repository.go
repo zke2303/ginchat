@@ -80,3 +80,17 @@ func (repo *UserRepository) Delete(id string) error {
 
 	return nil
 }
+
+// Update
+func (repo *UserRepository) Update(id string, maps *map[string]any) error {
+	result := repo.db.Model(&model.User{}).Where("id = ?", id).Updates(maps)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return xerr.Wrap(xerr.CodeNotFound, "Not Found", result.Error)
+	}
+
+	return nil
+}
