@@ -75,6 +75,11 @@ func (svc *UserService) Delete(id string) error {
 func (svc *UserService) Update(req *request.UpdateUserRequest) error {
 	// 1.将 request.UpdateUserRequest 转换成 map[string]any 对象
 	maps := ToMap(req)
+
+	if len(*maps) == 0 {
+		return nil
+	}
+
 	// 2.调用 reqo 层
 	return svc.repo.Update(req.Id.String(), maps)
 }

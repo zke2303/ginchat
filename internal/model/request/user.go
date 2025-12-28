@@ -7,7 +7,7 @@ type CreateUserRequest struct {
 	Password string `json:"password" binding:"required,min=6,max=30"`
 	Gender   uint8  `json:"gender"`
 	Age      uint8  `json:"age"`
-	Email    string `json:"email" binding:"required,min=8,max=30"`
+	Email    string `json:"email" binding:"required,min=8,max=30,email"`
 }
 
 type UpdateUserRequest struct {
@@ -15,5 +15,5 @@ type UpdateUserRequest struct {
 	Password *string   `json:"password"`
 	Gender   *uint8    `json:"gender"`
 	Age      *uint8    `json:"age"`
-	Email    *string   `json:"email"`
+	Email    *string   `json:"email" binding:"omitempty,email"`
 }
