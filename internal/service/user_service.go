@@ -7,6 +7,7 @@ import (
 	"github.com/nanfeng/ginchat/internal/model"
 	"github.com/nanfeng/ginchat/internal/model/request"
 	"github.com/nanfeng/ginchat/internal/pkg/utils"
+	"github.com/nanfeng/ginchat/internal/pkg/xerr"
 	"github.com/nanfeng/ginchat/internal/repository"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -24,11 +25,11 @@ func NewUserService(repo *repository.UserRepository) *UserService {
 func (svc *UserService) CreateUser(req *request.CreateUserRequest) (uuid.UUID, error) {
 	// 1.校验 username和email是否重复
 	if _, err := svc.repo.GetByUsername(req.Username); err == nil {
-		return uuid.Nil, errors.New("The username has Already been exists!")
+		return uuid.Nil, xerr.ErrUserAlreadyExist
 	}
 
 	if _, err := svc.repo.GetByEmail(req.Email); err == nil {
-		return uuid.Nil, errors.New("The email has Already been exists!")
+		return uuid.Nil, xerr.ErrEmailTaken
 	}
 
 	var user model.User
